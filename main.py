@@ -72,6 +72,13 @@ class Game:
             s.set_volume(0.1)
             self.zombie_moan_sounds.append(s)
 
+        self.player_hit_sounds = []
+        for snd in PLAYER_HIT_SOUNDS:
+            self.player_hit_sounds.append(pg.mixer.Sound(path.join(snd_folder, snd)))
+        self.zombie_hit_sounds = []
+        for snd in ZOMBIE_HIT_SOUNDS:
+            self.zombie_hit_sounds.append(pg.mixer.Sound(path.join(snd_folder, snd)))
+
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -136,6 +143,8 @@ class Game:
         # mobs hit player
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
         for hit in hits:
+            if random() < 0.7:
+                choice(self.player_hit_sounds).play()
             self.player.health -= MOB_DAMAGE
             hit.vel = vec(0, 0)
             if self.player.health <= 0:
